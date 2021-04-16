@@ -13,7 +13,7 @@ import java.util.Collection;
 
 @RestController
 @RequestMapping("/store")
-@CrossOrigin(origins = "http://localhost:3001")
+@CrossOrigin(origins = "http://localhost:3000")
 public class StoreResourceImpl implements StoreResourceInterface<Store>{
     @Autowired
     private StoreService storeService;
