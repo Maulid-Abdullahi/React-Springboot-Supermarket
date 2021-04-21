@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faList, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import axios from "axios"
 import Success from "./Success";
+import {Link} from "react-router-dom";
 
 
 
@@ -48,7 +49,7 @@ export default class ItemList extends Component {
         return (
             <div>
                 <div style={{"display":this.state.show ? "block" : "none"}}>
-                    <Success children = {{show:this.state.show, message:"Data Deleted successfully.", type:"danger"}}/>
+                    <Success show = {this.state.show} message = {"Data Deleted successfully."} type = {"danger"}/>
                 </div>
                 <Card className={"border border-dark bg-dark text-white"}>
                     <Card.Header ><FontAwesomeIcon icon={faList} /> Item List</Card.Header>
@@ -78,7 +79,8 @@ export default class ItemList extends Component {
                                         <td>{store.producer}</td>
                                         <td>
                                             <ButtonGroup >
-                                                <Button style={{marginRight:"1em"}}  size={"sm"} variant={"outline-primary"}><FontAwesomeIcon icon={faEdit}/></Button>
+                                                <Link style={{marginRight:"1em"}} to={"edit/"+store.id} className={"btn btn-sm btn-outline-primary"}><FontAwesomeIcon icon={faEdit}/></Link>{' '}
+                                                {/*<Button style={{marginRight:"1em"}}  size={"sm"} variant={"outline-primary"}><FontAwesomeIcon icon={faEdit}/></Button>*/}
 
                                             </ButtonGroup>
                                             <ButtonGroup>

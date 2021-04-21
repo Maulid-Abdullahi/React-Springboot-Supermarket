@@ -6,6 +6,8 @@ import Welcome from "./components/Welcome";
 import Footer from "./components/Footer";
 import AddItem from "./components/AddItem";
 import ItemList from "./components/ItemList";
+import Register from "./components/Register";
+import Login from "./components/Login";
 
 
 function App() {
@@ -22,7 +24,11 @@ function App() {
                     <Switch>
                         <Route path={"/"} exact component={Welcome} />
                         <Route path={"/add"} exact component={AddItem} />
+                        <Route path={"/edit/:id"} exact component={AddItem} />
                         <Route path={"/list"} exact component={ItemList} />
+                        <Route path={"/register"} exact component={Register} />
+                        <Route path={"/login"} exact component={Login} />
+
                     </Switch>
                 </Col>
             </Row>

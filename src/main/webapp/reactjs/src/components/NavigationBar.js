@@ -13,6 +13,11 @@ class NavigationBar extends  React.Component{
                     <Link to={"add"} className={"nav-link"}>Add Item</Link>
                     <Link to={"list"} className={"nav-link"}>List of Items</Link>
                 </Nav>
+                <Nav className={"navbar-right"}>
+                    <Link to={"login"} className={"nav-link"}>Login</Link>
+                    <Link to={"register"} className={"nav-link"}>Register</Link>
+
+                </Nav>
             </Navbar>
         );
     }

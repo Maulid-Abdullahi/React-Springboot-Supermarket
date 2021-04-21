@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Card, Form, Button,Col} from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faPlusSquare, faSave,faUndo} from '@fortawesome/free-solid-svg-icons';
+import {faPlusSquare, faSave,faUndo,faList,faEdit} from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import Success from"./Success";
 
@@ -14,6 +14,7 @@ export default class AddItem extends Component {
         this.submitItems = this.submitItems.bind(this);
     }
     initialState = {
+        id:'',
         group:'',
         productName:'',
         price:'',
@@ -21,6 +22,34 @@ export default class AddItem extends Component {
         imageUrl:'',
         producer:'',
     }
+
+    componentDidMount() {
+        const storeId = +this.props.match.params.id;
+        if(storeId){
+            this.findItemById(storeId);
+        }
+    }
+    findItemById = (storeId) =>{
+        axios.get("http://localhost:8080/rest/store/"+storeId)
+            .then(response =>{
+                if(response.data != null){
+                    this.setState({
+                        id:response.data.id,
+                        group:response.data.group,
+                        productName:response.data.productName,
+                        price:response.data.price,
+                        expiry:response.data.expiry,
+                        imageUrl:response.data.imageUrl,
+                        producer:response.data.producer
+                    })
+                }
+
+            }).catch((error)=>{
+            console.log("Error -",error)
+        })
+
+    }
+
     submitItems = (e) =>{
         e.preventDefault();
         const store = {
@@ -35,7 +64,7 @@ export default class AddItem extends Component {
         axios.post("http://localhost:8080/rest/store", store)
             .then(response =>{
                 if(response.data != null){
-                    this.setState({show:true});
+                    this.setState({show:true,"method":"post"});
                     setTimeout(()=>
                         this.setState({show:false}),3000);
                 }else {
@@ -44,6 +73,35 @@ export default class AddItem extends Component {
             });
         this.setState(this.initialState);
     }
+    updateItem = (event) => {
+        event.preventDefault();
+        const store = {
+            id:this.state.id,
+            group: this.state.group,
+            productName: this.state.productName,
+            price: this.state.price,
+            expiry: this.state.expiry,
+            imageUrl: this.state.imageUrl,
+            producer: this.state.producer,
+        }
+
+        axios.put("http://localhost:8080/rest/store",store)
+            .then(response =>{
+                if(response.data != null){
+                    this.setState({show:true, "method":"put"});
+                    setTimeout(()=>
+                        this.setState({show:false}),3000);
+                    setTimeout(()=>
+                        this.setState(this.itemList()),3000);
+                }else {
+                    this.setState({show:false});
+                }
+            });
+        this.setState(this.initialState);
+
+    }
+
+
     resetForm = ()=>{
         this.setState(()=> this.initialState)
 
@@ -51,19 +109,21 @@ export default class AddItem extends Component {
     onChange = (eve)=>{
         this.setState({
             [eve.target.name]:eve.target.value
-        })
+        })}
 
+    itemList = ()=>{
+        return this.props.history.push("/list");
     }
     render() {
         const {group,productName,price,expiry,imageUrl,producer} = this.state;
         return (
             <div>
                 <div style={{"display":this.state.show ? "block" : "none"}}>
-                    <Success children = {{show:this.state.show, message:"Data saved successfully.",type:"success"}}/>
+                    <Success show={this.state.show} message = {this.state.method === "put" ? "Data Updated Successfully" :"Data saved successfully."} type = {"success"}/>
                 </div>
                 <Card className={"border border-dark bg-dark text-white"}>
-                    <Card.Header><FontAwesomeIcon icon={faPlusSquare} /> Add Item</Card.Header>
-                    <Form onReset={this.resetForm} onSubmit={this.submitItems} id={"ItemFormId"}>
+                    <Card.Header><FontAwesomeIcon icon={this.state.id ? faEdit : faPlusSquare} />{this.state.id ? "Update Item" : "Add Item"}</Card.Header>
+                    <Form onReset={this.resetForm} onSubmit={this.state.id ? this.updateItem : this.submitItems} id={"ItemFormId"}>
                         <Card.Body>
                             <Form.Row>
                                 <Form.Group as={Col} controlId={"formGridGroup"}>
@@ -132,10 +192,12 @@ export default class AddItem extends Component {
                         </Card.Body>
                         <Card.Footer style ={{textAlign:"right"}}>
                             <Button size={"sm"} variant="success" type="submit">
-                                <FontAwesomeIcon icon={faSave} /> Submit
-                            </Button>{' '}
+                                <FontAwesomeIcon icon={faSave} />{this.state.id ? "Update" : "Save"}</Button>{' '}
                             <Button size={"sm"} variant="info" type="reset">
                                 <FontAwesomeIcon icon={faUndo} /> Reset
+                            </Button>{' '}
+                            <Button size={"sm"} variant="info" type="button" onClick={this.itemList.bind()}>
+                                <FontAwesomeIcon icon={faList} /> Item List
                             </Button>
                         </Card.Footer>
                     </Form>
