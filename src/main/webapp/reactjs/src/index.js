@@ -4,6 +4,8 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+export * from './services/auth/authActions';
+
 ReactDOM.render(
   <React.StrictMode>
     <App />

@@ -1,6 +1,8 @@
 import React from "react";
 import {Navbar, Nav} from "react-bootstrap";
 import NavLink, {Link} from "react-router-dom";
+import {faSignInAlt, faUserPlus} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 class NavigationBar extends  React.Component{
     render() {
         return(
@@ -14,8 +16,8 @@ class NavigationBar extends  React.Component{
                     <Link to={"list"} className={"nav-link"}>List of Items</Link>
                 </Nav>
                 <Nav className={"navbar-right"}>
-                    <Link to={"login"} className={"nav-link"}>Login</Link>
-                    <Link to={"register"} className={"nav-link"}>Register</Link>
+                    <Link to={"login"} className={"nav-link"}><FontAwesomeIcon icon={faUserPlus} /> Login</Link>
+                    <Link to={"register"} className={"nav-link"}><FontAwesomeIcon icon={faSignInAlt} /> Register</Link>
 
                 </Nav>
             </Navbar>
